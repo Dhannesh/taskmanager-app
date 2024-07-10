@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 export const getAllTasks = async (req, res) => {
   try {
     const tasks = await Task.find();
-    res.status(StatusCodes.OK).json({ len: tasks.length, data: tasks });
+    res.status(StatusCodes.OK).json({ len: tasks.length, tasks });
   } catch (error) {
     res.status(500).json({ msg: error });
   }
@@ -21,13 +21,15 @@ export const getTask = async (req, res) => {
   try {
     const { id } = req.params;
     // const task = await Task.findById(id);
-    const task = await Task.find({ _id: id });
+    // const task = await Task.find({ _id: id });
+    const task = await Task.findOne({ _id: id });
     if (task) return res.status(200).json({ task });
     return res.status(404).json({ msg: `task not found with id : ${id}` });
   } catch (error) {
     res.status(500).json({ msg: error });
   }
 };
+
 export const updateTask = async (req, res) => {
   try {
     const { id } = req.params;
